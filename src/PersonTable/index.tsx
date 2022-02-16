@@ -1,6 +1,8 @@
 import React from "react";
 import { Person } from "../types";
 
+import './Table.css';
+
 const PersonTable = ({ persons, removeFunction }: { persons: Array<Person>, removeFunction:  (removableId: string) => void }) => {
   console.log(persons);
 
@@ -11,7 +13,7 @@ const PersonTable = ({ persons, removeFunction }: { persons: Array<Person>, remo
   };
 
   return (
-    <table>
+    <table className="Table">
       <thead>
         <tr>
           <th>First Name</th>
@@ -32,8 +34,8 @@ const PersonTable = ({ persons, removeFunction }: { persons: Array<Person>, remo
 const PersonTableRow = ({ person, handleRemove }: { person: Person, handleRemove: (e: React.MouseEvent<HTMLButtonElement>) => void }) => (
   <>
     <tr>
-      <td>{person.firstname}</td>
-      <td>{person.lastname}</td>
+      <td>{person.firstName}</td>
+      <td>{person.lastName}</td>
       <td>{person.age}</td>
       <td>
         <button id={person.id} onClick={handleRemove}>Remove</button>

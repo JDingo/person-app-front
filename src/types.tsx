@@ -1,6 +1,8 @@
 export interface Person {
-  firstname: string,
-  lastname: string,
+  firstName: string,
+  lastName: string,
   age: number,
   id: string
 }
+
+export type newPerson = Omit<Person, "id">;
