@@ -1,15 +1,14 @@
 import React from "react";
 import { Person } from "../types";
 
-const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
-  e.preventDefault();
-  console.log(e.currentTarget.id, typeof e.currentTarget.id);
-};
-
-console.log(handleRemove);
-
-const PersonTable = ({ persons }: { persons: Array<Person> }) => {
+const PersonTable = ({ persons, removeFunction }: { persons: Array<Person>, removeFunction:  (removableId: string) => void }) => {
   console.log(persons);
+
+  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log(`Removing ${e.currentTarget.id}`);
+    removeFunction(e.currentTarget.id);
+  };
 
   return (
     <table>
@@ -23,14 +22,14 @@ const PersonTable = ({ persons }: { persons: Array<Person> }) => {
       </thead>
       <tbody>
         {persons.map(person => (
-          <PersonTableRow key={person.id} person={person} />
+          <PersonTableRow key={person.id} person={person} handleRemove={handleRemove} />
         ))}
       </tbody>
     </table>
   );
 };
 
-const PersonTableRow = ({ person }: { person: Person }) => (
+const PersonTableRow = ({ person, handleRemove }: { person: Person, handleRemove: (e: React.MouseEvent<HTMLButtonElement>) => void }) => (
   <>
     <tr>
       <td>{person.firstname}</td>

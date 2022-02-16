@@ -7,8 +7,6 @@ import { Person } from './types';
 const App = () => {
   const [persons, setPersons] = useState<Array<Person>>([]);
 
-  console.log(setPersons);
-
   useEffect(() => {
     setPersons([
       {
@@ -38,9 +36,19 @@ const App = () => {
     ]);
   }, []);
 
+  const removePerson = (removableId: string) => {
+    const removedPerson = persons.find(person => person.id === removableId);
+    if (!removedPerson) {
+      console.log("Not found!");
+    } else {
+      console.log(`Selected person (${removableId}) => ${removedPerson.firstname} ${removedPerson.lastname}`);
+      setPersons(persons.filter(person => person.id !== removableId));
+    }
+  };
+
   return (
     <div className="App">
-      <PersonTable persons={persons} />
+      <PersonTable persons={persons} removeFunction={removePerson} />
     </div>
   );
 };
