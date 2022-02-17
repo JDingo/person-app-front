@@ -5,4 +5,4 @@ export interface Person {
   id: string
 }
 
-export type newPerson = Omit<Person, "id">;
+export type NewPerson = Omit<Person, "id">;

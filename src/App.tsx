@@ -2,42 +2,32 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import PersonTable from './PersonTable';
-import { newPerson, Person } from './types';
+import { NewPerson, Person } from './types';
 
 import './App.css';
 import AddPersonModal from './AddPersonModal';
+import axios from 'axios';
 
 const App = () => {
   const [persons, setPersons] = useState<Array<Person>>([]);
   const [newPersonModalOpen, setNewPersonModalOpen] = useState<boolean>(false);
 
+  const baseUrl = 'http://localhost:3001';
+
   useEffect(() => {
-    setPersons([
-      {
-        firstName: "Pekka",
-        lastName: "Hyvärinen",
-        age: 60,
-        id: "1"
-      },
-      {
-        firstName: "Sami",
-        lastName: "Salami",
-        age: 14,
-        id: "2"
-      },
-      {
-        firstName: "Liisa",
-        lastName: "Loskanen",
-        age: 34,
-        id: "3"
-      },
-      {
-        firstName: "Anna",
-        lastName: "Tulla",
-        age: 56,
-        id: "4"
+    const fetchPersonsList = async () => {
+      try {
+        const response = await axios.get<Person[]>(
+          `${baseUrl}/api/persons`
+        );
+
+        setPersons(response.data);
+      } catch (e) {
+        console.error(e);
       }
-    ]);
+    };
+
+    void fetchPersonsList();
   }, []);
 
   const removePerson = (removableId: string) => {
@@ -50,18 +40,23 @@ const App = () => {
     }
   };
 
-  const addPerson = ({ firstName, lastName, age }: newPerson) => {
-    const newPerson: Person = {
-      firstName,
-      lastName,
-      age,
-      id: (Math.random() * 100).toString()
-    };
-    
-    const newPersons = [...persons, newPerson];
-    console.log("Added new person", newPerson);
-    setPersons(newPersons);
-    setNewPersonModalOpen(false);
+  const addPerson = async ({ firstName, lastName, age }: NewPerson) => {
+    try {
+      const newPerson = {
+        firstName,
+        lastName,
+        age
+      };
+
+      const { data: addedPerson } = await axios.post<Person>(`${baseUrl}/api/persons`, newPerson);
+      
+      const newPersons = [...persons, addedPerson];
+      console.log("Added new person", newPerson);
+      setPersons(newPersons);
+      setNewPersonModalOpen(false);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const openNewPersonModal = () => {
@@ -72,8 +67,8 @@ const App = () => {
     <div className="App" >
       <h1>Person Database</h1>
       <h3>Person Table</h3>
-      <PersonTable persons={persons} removeFunction={removePerson}/>
-      <AddPersonModal modalOpen={newPersonModalOpen} addFunction={addPerson} closeModal={openNewPersonModal}/>
+      <PersonTable persons={persons} removeFunction={removePerson} />
+      <AddPersonModal modalOpen={newPersonModalOpen} addFunction={addPerson} closeModal={openNewPersonModal} />
       <button onClick={openNewPersonModal}>Add new person</button>
     </div>
   );

@@ -1,11 +1,11 @@
 import React, { FormEvent } from 'react';
-import { newPerson } from '../types';
+import { NewPerson } from '../types';
 import { isNumber, isString } from '../utils';
 import './AddPersonModal.css';
 
 const AddPersonModal = ({ modalOpen, addFunction, closeModal }: 
   { modalOpen: boolean, 
-    addFunction: ({ firstName, lastName, age }: newPerson) => void,
+    addFunction: ({ firstName, lastName, age }: NewPerson) => void,
     closeModal: () => void
   }) => {
   
@@ -17,7 +17,7 @@ const AddPersonModal = ({ modalOpen, addFunction, closeModal }:
     const age: unknown = e.currentTarget.age.value;
 
     if (isString(firstName) && isString(lastName) && isNumber(age)) {
-      const newPerson: newPerson = {
+      const newPerson: NewPerson = {
         firstName,
         lastName,
         age: parseInt(age)
