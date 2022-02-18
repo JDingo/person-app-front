@@ -4,7 +4,6 @@ import { Person } from "../types";
 import './Table.css';
 
 const PersonTable = ({ persons, removeFunction }: { persons: Array<Person>, removeFunction:  (removableId: string) => void }) => {
-  console.log(persons);
 
   const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
