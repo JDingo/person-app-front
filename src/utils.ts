@@ -1,4 +1,4 @@
-import { Person } from "./types";
+import { Person, SortBy } from "./types";
 
 export const isString = (x: unknown): x is string => {
   return typeof x === "string";
@@ -8,10 +8,10 @@ export const isNumber = (x: unknown): x is string => {
   return (typeof x === "string" && !isNaN(parseInt(x)));
 };
 
-export const sortPersons = (persons: Array<Person>, sortTerm: string, ascending: boolean) => {
+export const sortPersons = (persons: Array<Person>, sortBy: SortBy) => {
   const sortedPersons = [...persons];
 
-  switch (sortTerm) {
+  switch (sortBy.sortCriteria) {
     case "firstName":
       sortedPersons.sort(sortByFirstName);
       break;
@@ -26,7 +26,7 @@ export const sortPersons = (persons: Array<Person>, sortTerm: string, ascending:
   }
 
   console.log("Sorted:", sortedPersons);
-  if (ascending) {
+  if (sortBy.ascending) {
     return sortedPersons.reverse();
   } else {
     return sortedPersons;

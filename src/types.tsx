@@ -6,3 +6,8 @@ export interface Person {
 }
 
 export type NewPerson = Omit<Person, "id">;
+
+export interface SortBy {
+  sortCriteria: string,
+  ascending: boolean
+}

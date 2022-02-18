@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import PersonTable from './PersonTable';
-import { NewPerson, Person } from './types';
+import { NewPerson, Person, SortBy } from './types';
 
 import './App.css';
 import AddPersonModal from './AddPersonModal';
@@ -12,7 +12,9 @@ import { sortPersons } from './utils';
 const App = () => {
   const [persons, setPersons] = useState<Array<Person>>([]);
   const [newPersonModalOpen, setNewPersonModalOpen] = useState<boolean>(false);
-  const [sortBy, setSortBy] = useState<string>("firstName");
+
+  const startSort: SortBy = { sortCriteria: 'firstName', ascending: false };
+  const [sortBy, setSortBy] = useState<SortBy>(startSort);
 
   const baseUrl = 'http://localhost:3001';
 
@@ -23,16 +25,18 @@ const App = () => {
           `${baseUrl}/api/persons`
         );
 
-        setPersons(sortPersons(response.data, sortBy, false));
+        setPersons(sortPersons(response.data, sortBy));
       } catch (e) {
         console.error(e);
       }
     };
 
-    console.log(setSortBy);
-
     void fetchPersonsList();
   }, []);
+
+  useEffect(() => {
+    setPersons(sortPersons(persons, sortBy));
+  }, [sortBy]);
 
   const removePerson = (removableId: string) => {
     const removedPerson = persons.find(person => person.id === removableId);
@@ -71,7 +75,7 @@ const App = () => {
     <div className="App" >
       <h1>Person Database</h1>
       <h3>Person Table</h3>
-      <PersonTable persons={persons} removeFunction={removePerson} />
+      <PersonTable persons={persons} removeFunction={removePerson} sortBy={sortBy} setSortBy={setSortBy} />
       <AddPersonModal modalOpen={newPersonModalOpen} addFunction={addPerson} closeModal={openNewPersonModal} />
       <button onClick={openNewPersonModal}>Add new person</button>
     </div>
