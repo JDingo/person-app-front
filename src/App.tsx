@@ -38,13 +38,17 @@ const App = () => {
     setPersons(sortPersons(persons, sortBy));
   }, [sortBy]);
 
-  const removePerson = (removableId: string) => {
+  const removePerson = async (removableId: string) => {
     const removedPerson = persons.find(person => person.id === removableId);
     if (!removedPerson) {
       console.log("Not found!");
     } else {
-      console.log(`Selected person (${removableId}) => ${removedPerson.firstName} ${removedPerson.lastName}`);
-      setPersons(persons.filter(person => person.id !== removableId));
+      const response = await axios.delete(`${baseUrl}/${removableId}`);
+      if (response.status == 204) {
+        setPersons(persons.filter(person => person.id !== removableId));
+      } else {
+        console.error("Error", response.status);
+      }
     }
   };
 
