@@ -40,49 +40,6 @@ const App = () => {
     dispatch(setPersonsAction(state.persons));
   }, [state.sortBy]);
 
-  /* const removePerson = async (removableId: string) => {
-    const removedPerson = persons.find(person => person.id === removableId);
-    if (!removedPerson) {
-      console.log("Not found!");
-    } else {
-      const response = await axios.delete(`${baseUrl}/${removableId}`);
-      if (response.status == 204) {
-        setPersons(persons.filter(person => person.id !== removableId));
-      } else {
-        console.error("Error", response.status);
-      }
-    }
-  };
-
-  const addPerson = async ({ firstName, lastName, age }: NewPerson) => {
-    try {
-      const newPerson = {
-        firstName,
-        lastName,
-        age
-      };
-
-      const { data: addedPerson } = await axios.post<Person>(`${baseUrl}`, newPerson);
-
-      const newPersons = [...persons, addedPerson];
-      setPersons(sortPersons(newPersons, sortBy));
-      setNewPersonModalOpen(false);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const editPerson = async (editPerson: Person) => {
-    try {
-      const { data: editedPerson } = await axios.put<Person>(`${baseUrl}/${editPerson.id}`, editPerson);
-      const newPersons = persons.map(person => person.id === editedPerson.id ? editedPerson : person);
-      setPersons(sortPersons(newPersons, sortBy));
-      setNewPersonModalOpen(false);
-    } catch (e) {
-      console.error(e);
-    }
-  }; */
-
   const removePerson = async (removableId: string) => {
     const removedPerson = state.persons.find(person => person.id === removableId);
     if (!removedPerson) {
