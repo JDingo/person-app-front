@@ -89,7 +89,7 @@ export const reducer = (state: State, action: Action): State => {
     case "CHANGE_SORT":
       return {
         ...state,
-        sortBy: { sortCriteria: action.data, ascending: !state.sortBy.ascending }
+        sortBy: { sortCriteria: action.data, ascending: state.sortBy.sortCriteria !== action.data ? false : true }
       };
 
     default:
