@@ -16,13 +16,13 @@ const App = () => {
   const startSort: SortBy = { sortCriteria: 'firstName', ascending: false };
   const [sortBy, setSortBy] = useState<SortBy>(startSort);
 
-  const baseUrl = 'http://localhost:3001';
+  const baseUrl = '/api/persons';
 
   useEffect(() => {
     const fetchPersonsList = async () => {
       try {
         const response = await axios.get<Person[]>(
-          `${baseUrl}/api/persons`
+          `${baseUrl}`
         );
 
         setPersons(sortPersons(response.data, sortBy));
@@ -56,11 +56,10 @@ const App = () => {
         age
       };
 
-      const { data: addedPerson } = await axios.post<Person>(`${baseUrl}/api/persons`, newPerson);
+      const { data: addedPerson } = await axios.post<Person>(`${baseUrl}`, newPerson);
 
       const newPersons = [...persons, addedPerson];
-      console.log("Added new person", newPerson);
-      setPersons(newPersons);
+      setPersons(sortPersons(newPersons, sortBy));
       setNewPersonModalOpen(false);
     } catch (e) {
       console.error(e);
