@@ -1,13 +1,12 @@
 import React from "react";
 import { Person, SortBy } from "../types";
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { IoMdArrowDropdown, IoMdArrowDropup, IoMdTrash } from 'react-icons/io';
 import './Table.css';
 
 const PersonTable = ({ persons, removeFunction, sortBy, setSortBy }: { persons: Array<Person>, removeFunction: (removableId: string) => void, sortBy: SortBy, setSortBy: React.Dispatch<React.SetStateAction<SortBy>> }) => {
 
   const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(`Removing ${e.currentTarget.id}`);
     removeFunction(e.currentTarget.id);
   };
 
@@ -43,7 +42,7 @@ const PersonTableRow = ({ person, handleRemove }: { person: Person, handleRemove
       <td>{person.lastName}</td>
       <td>{person.age}</td>
       <td>
-        <button id={person.id} onClick={handleRemove}>Remove</button>
+        <button id={person.id} onClick={handleRemove}><IoMdTrash /></button>
       </td>
     </tr>
   </>
