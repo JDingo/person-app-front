@@ -25,7 +25,6 @@ export const sortPersons = (persons: Array<Person>, sortBy: SortBy) => {
       break;
   }
 
-  console.log("Sorted:", sortedPersons);
   if (sortBy.ascending) {
     return sortedPersons.reverse();
   } else {

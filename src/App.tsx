@@ -10,6 +10,24 @@ import axios from 'axios';
 import EditPersonModal from './EditPersonModal';
 import { addPersonAction, removePersonAction, setPersonsAction, updatePersonAction, useStateValue } from './state';
 
+import styled from 'styled-components';
+
+const Page = styled.div`
+  background: #F6CACA;
+  height: 100vh;
+  width: 100wh;
+`;
+
+const Button = styled.button`
+  background: White;
+  color: black;
+  font-size: 16px;
+  margin: 20px 20px 20px 20px;
+  padding: 15px 15px 15px 15px;
+  border: 2px solid white;
+  border-radius: 8px;
+`;
+
 const App = () => {
   const [selectedPerson, setSelectedPerson] = useState<Person | undefined>(undefined);
 
@@ -53,7 +71,7 @@ const App = () => {
       }
     }
   };
-  
+
   const addPerson = async ({ firstName, lastName, age }: NewPerson) => {
     try {
       const newPerson = {
@@ -61,7 +79,7 @@ const App = () => {
         lastName,
         age
       };
-  
+
       const { data: addedPerson } = await axios.post<Person>(`${baseUrl}`, newPerson);
       dispatch(addPersonAction(addedPerson));
       setNewPersonModalOpen(false);
@@ -69,7 +87,7 @@ const App = () => {
       console.error(error);
     }
   };
-  
+
   const editPerson = async (editPerson: Person) => {
     try {
       const { data: editedPerson } = await axios.put<Person>(`${baseUrl}/${editPerson.id}`, editPerson);
@@ -91,14 +109,14 @@ const App = () => {
   };
 
   return (
-    <div className="App" >
-      <h1>Person Database</h1>
-      <h3>Person Table</h3>
-      <PersonTable removeFunction={removePerson} editModalState={changeEditModalVisibility}/>
-      <AddPersonModal modalOpen={newPersonModalOpen} addFunction={addPerson} closeModal={changeAddModalVisibility} />
-      <EditPersonModal modalOpen={editPersonModalOpen} editFunction={editPerson} closeModal={changeEditModalVisibility} selectedPerson={selectedPerson} />
-      <button onClick={changeAddModalVisibility}>Add new person</button>
-    </div>
+    <Page className="App" >
+        <h1>Person Database</h1>
+        <h3>Person Table</h3>
+        <PersonTable removeFunction={removePerson} editModalState={changeEditModalVisibility} />
+        <AddPersonModal modalOpen={newPersonModalOpen} addFunction={addPerson} closeModal={changeAddModalVisibility} />
+        <EditPersonModal modalOpen={editPersonModalOpen} editFunction={editPerson} closeModal={changeEditModalVisibility} selectedPerson={selectedPerson} />
+        <Button onClick={changeAddModalVisibility}>Add new person</Button>
+    </Page>
   );
 };
 

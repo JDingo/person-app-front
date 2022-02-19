@@ -3,6 +3,7 @@ import { Person } from "../types";
 import { IoMdArrowDropdown, IoMdArrowDropup, IoMdTrash } from 'react-icons/io';
 import './Table.css';
 import { changeSortAction, useStateValue } from "../state";
+import styled from "styled-components";
 
 const PersonTable = ({ removeFunction, editModalState }: { removeFunction: (removableId: string) => void, editModalState: (id: string) => void }) => {
   const [state, dispatch] = useStateValue();
@@ -45,7 +46,7 @@ const PersonTableRow = ({ person, handleRemove, editModalState }: { person: Pers
       <td>{person.lastName}</td>
       <td>{person.age}</td>
       <td>
-        <button id={person.id} onClick={handleRemove}><IoMdTrash /></button>
+        <RemoveButton id={person.id} onClick={handleRemove}><IoMdTrash fontSize="1.5em" /></RemoveButton>
       </td>
     </tr>
   </>
@@ -63,5 +64,15 @@ const SortIcon = ({ header }: { header: string }) => {
 
   return null;
 };
+
+const RemoveButton = styled.button` 
+  cursor: pointer;
+  background: white;
+  border-radius: 5px;
+
+  &:hover  {
+    background: #F30C00;
+  }
+`;
 
 export default PersonTable;
