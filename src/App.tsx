@@ -2,22 +2,21 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import PersonTable from './PersonTable';
-import { NewPerson, Person, SortBy } from './types';
+import { NewPerson, Person } from './types';
 
 import './App.css';
 import AddPersonModal from './AddPersonModal';
 import axios from 'axios';
-import { sortPersons } from './utils';
 import EditPersonModal from './EditPersonModal';
+import { addPersonAction, removePersonAction, setPersonsAction, updatePersonAction, useStateValue } from './state';
 
 const App = () => {
-  const [persons, setPersons] = useState<Array<Person>>([]);
-  const [newPersonModalOpen, setNewPersonModalOpen] = useState<boolean>(false);
-  const [editPersonModalOpen, setEditPersonModalOpen] = useState<boolean>(false);
   const [selectedPerson, setSelectedPerson] = useState<Person | undefined>(undefined);
 
-  const startSort: SortBy = { sortCriteria: 'firstName', ascending: false };
-  const [sortBy, setSortBy] = useState<SortBy>(startSort);
+  const [newPersonModalOpen, setNewPersonModalOpen] = useState<boolean>(false);
+  const [editPersonModalOpen, setEditPersonModalOpen] = useState<boolean>(false);
+
+  const [state, dispatch] = useStateValue();
 
   const baseUrl = '/api/persons';
 
@@ -28,7 +27,7 @@ const App = () => {
           `${baseUrl}`
         );
 
-        setPersons(sortPersons(response.data, sortBy));
+        dispatch(setPersonsAction(response.data));
       } catch (e) {
         console.error(e);
       }
@@ -38,10 +37,10 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    setPersons(sortPersons(persons, sortBy));
-  }, [sortBy]);
+    dispatch(setPersonsAction(state.persons));
+  }, [state.sortBy]);
 
-  const removePerson = async (removableId: string) => {
+  /* const removePerson = async (removableId: string) => {
     const removedPerson = persons.find(person => person.id === removableId);
     if (!removedPerson) {
       console.log("Not found!");
@@ -82,16 +81,54 @@ const App = () => {
     } catch (e) {
       console.error(e);
     }
+  }; */
+
+  const removePerson = async (removableId: string) => {
+    const removedPerson = state.persons.find(person => person.id === removableId);
+    if (!removedPerson) {
+      console.log("Not found!");
+    } else {
+      const response = await axios.delete(`${baseUrl}/${removableId}`);
+      if (response.status == 204) {
+        dispatch(removePersonAction(removedPerson));
+      } else {
+        console.error("Error", response.status);
+      }
+    }
+  };
+  
+  const addPerson = async ({ firstName, lastName, age }: NewPerson) => {
+    try {
+      const newPerson = {
+        firstName,
+        lastName,
+        age
+      };
+  
+      const { data: addedPerson } = await axios.post<Person>(`${baseUrl}`, newPerson);
+      dispatch(addPersonAction(addedPerson));
+      setNewPersonModalOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  const editPerson = async (editPerson: Person) => {
+    try {
+      const { data: editedPerson } = await axios.put<Person>(`${baseUrl}/${editPerson.id}`, editPerson);
+      dispatch(updatePersonAction(editedPerson));
+      setEditPersonModalOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  console.log(editPerson);
-
-  const openNewPersonModal = () => {
+  const changeAddModalVisibility = () => {
     setNewPersonModalOpen(!newPersonModalOpen);
   };
 
   const changeEditModalVisibility = (id: string) => {
-    const selectedPerson = persons.find(person => person.id == id);
+    const selectedPerson = state.persons.find(person => person.id == id);
     setSelectedPerson(selectedPerson);
     setEditPersonModalOpen(!editPersonModalOpen);
   };
@@ -100,10 +137,10 @@ const App = () => {
     <div className="App" >
       <h1>Person Database</h1>
       <h3>Person Table</h3>
-      <PersonTable persons={persons} removeFunction={removePerson} sortBy={sortBy} setSortBy={setSortBy} editModalState={changeEditModalVisibility}/>
-      <AddPersonModal modalOpen={newPersonModalOpen} addFunction={addPerson} closeModal={openNewPersonModal} />
+      <PersonTable removeFunction={removePerson} editModalState={changeEditModalVisibility}/>
+      <AddPersonModal modalOpen={newPersonModalOpen} addFunction={addPerson} closeModal={changeAddModalVisibility} />
       <EditPersonModal modalOpen={editPersonModalOpen} editFunction={editPerson} closeModal={changeEditModalVisibility} selectedPerson={selectedPerson} />
-      <button onClick={openNewPersonModal}>Add new person</button>
+      <button onClick={changeAddModalVisibility}>Add new person</button>
     </div>
   );
 };

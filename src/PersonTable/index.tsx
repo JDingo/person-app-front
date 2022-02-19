@@ -1,33 +1,36 @@
 import React from "react";
-import { Person, SortBy } from "../types";
+import { Person } from "../types";
 import { IoMdArrowDropdown, IoMdArrowDropup, IoMdTrash } from 'react-icons/io';
 import './Table.css';
+import { changeSortAction, useStateValue } from "../state";
 
-const PersonTable = ({ persons, removeFunction, sortBy, setSortBy, editModalState }: { persons: Array<Person>, removeFunction: (removableId: string) => void, sortBy: SortBy, setSortBy: React.Dispatch<React.SetStateAction<SortBy>>, editModalState: (id: string) => void }) => {
+const PersonTable = ({ removeFunction, editModalState }: { removeFunction: (removableId: string) => void, editModalState: (id: string) => void }) => {
+  const [state, dispatch] = useStateValue();
 
-  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    removeFunction(e.currentTarget.id);
+  const handleRemove = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    removeFunction(event.currentTarget.id);
   };
 
   return (
     <table className="Table">
       <thead>
         <tr>
-          <th onClick={() => setSortBy({ sortCriteria: 'firstName', ascending: !sortBy.ascending })}>
-            First Name<SortIcon sortBy={sortBy} header='firstName' />
+          <th onClick={() => dispatch(changeSortAction("firstName"))}>
+            First Name<SortIcon  header='firstName' />
           </th>
-          <th onClick={() => setSortBy({ sortCriteria: 'lastName', ascending: !sortBy.ascending })}>
-            Last Name<SortIcon sortBy={sortBy} header='lastName' />
+          <th onClick={() => dispatch(changeSortAction("lastName"))}>
+            Last Name<SortIcon header='lastName' />
           </th>
-          <th onClick={() => setSortBy({ sortCriteria: 'age', ascending: !sortBy.ascending })}>
-            Age<SortIcon sortBy={sortBy} header='age' />
+          <th onClick={() => dispatch(changeSortAction("age"))}>
+            Age<SortIcon header='age' />
           </th>
           <th>Remove </th>
         </tr>
       </thead>
       <tbody>
-        {persons.map(person => (
+        {state.persons.map(person => (
           <PersonTableRow key={person.id} person={person} handleRemove={handleRemove} editModalState={editModalState} />
         ))}
       </tbody>
@@ -48,9 +51,10 @@ const PersonTableRow = ({ person, handleRemove, editModalState }: { person: Pers
   </>
 );
 
-const SortIcon = ({ sortBy, header }: { sortBy: SortBy, header: string }) => {
-  if (sortBy.sortCriteria === header) {
-    if (!sortBy.ascending) {
+const SortIcon = ({ header }: { header: string }) => {
+  const [state] = useStateValue();
+  if (state.sortBy.sortCriteria === header) {
+    if (!state.sortBy.ascending) {
       return <IoMdArrowDropdown />;
     } else {
       return <IoMdArrowDropup />;
