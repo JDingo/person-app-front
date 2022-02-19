@@ -3,7 +3,7 @@ import { Person, SortBy } from "../types";
 import { IoMdArrowDropdown, IoMdArrowDropup, IoMdTrash } from 'react-icons/io';
 import './Table.css';
 
-const PersonTable = ({ persons, removeFunction, sortBy, setSortBy }: { persons: Array<Person>, removeFunction: (removableId: string) => void, sortBy: SortBy, setSortBy: React.Dispatch<React.SetStateAction<SortBy>> }) => {
+const PersonTable = ({ persons, removeFunction, sortBy, setSortBy, editModalState }: { persons: Array<Person>, removeFunction: (removableId: string) => void, sortBy: SortBy, setSortBy: React.Dispatch<React.SetStateAction<SortBy>>, editModalState: (id: string) => void }) => {
 
   const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -28,16 +28,16 @@ const PersonTable = ({ persons, removeFunction, sortBy, setSortBy }: { persons: 
       </thead>
       <tbody>
         {persons.map(person => (
-          <PersonTableRow key={person.id} person={person} handleRemove={handleRemove} />
+          <PersonTableRow key={person.id} person={person} handleRemove={handleRemove} editModalState={editModalState} />
         ))}
       </tbody>
     </table>
   );
 };
 
-const PersonTableRow = ({ person, handleRemove }: { person: Person, handleRemove: (e: React.MouseEvent<HTMLButtonElement>) => void }) => (
+const PersonTableRow = ({ person, handleRemove, editModalState }: { person: Person, handleRemove: (e: React.MouseEvent<HTMLButtonElement>) => void, editModalState: (id: string) => void }) => (
   <>
-    <tr>
+    <tr onClick={() => editModalState(person.id)}>
       <td>{person.firstName}</td>
       <td>{person.lastName}</td>
       <td>{person.age}</td>
