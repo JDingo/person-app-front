@@ -74,11 +74,7 @@ const App = () => {
 
   const addPerson = async ({ firstName, lastName, age }: NewPerson) => {
     try {
-      const newPerson = {
-        firstName,
-        lastName,
-        age
-      };
+      const newPerson = { firstName, lastName, age };
 
       const { data: addedPerson } = await axios.post<Person>(`${baseUrl}`, newPerson);
       dispatch(addPersonAction(addedPerson));
@@ -110,12 +106,12 @@ const App = () => {
 
   return (
     <Page className="App" >
-        <h1>Person Database</h1>
-        <h3>Person Table</h3>
-        <PersonTable removeFunction={removePerson} editModalState={changeEditModalVisibility} />
-        <AddPersonModal modalOpen={newPersonModalOpen} addFunction={addPerson} closeModal={changeAddModalVisibility} />
-        <EditPersonModal modalOpen={editPersonModalOpen} editFunction={editPerson} closeModal={changeEditModalVisibility} selectedPerson={selectedPerson} />
-        <Button onClick={changeAddModalVisibility}>Add new person</Button>
+      <h1>Person Database</h1>
+      <h3>Person Table</h3>
+      <PersonTable removeFunction={removePerson} editModalState={changeEditModalVisibility} />
+      <AddPersonModal modalOpen={newPersonModalOpen} addFunction={addPerson} closeModal={changeAddModalVisibility} />
+      <EditPersonModal modalOpen={editPersonModalOpen} editFunction={editPerson} closeModal={changeEditModalVisibility} selectedPerson={selectedPerson} />
+      <Button onClick={changeAddModalVisibility}>Add new person</Button>
     </Page>
   );
 };

@@ -15,27 +15,29 @@ const PersonTable = ({ removeFunction, editModalState }: { removeFunction: (remo
   };
 
   return (
-    <table className="Table">
-      <thead>
-        <tr>
-          <th onClick={() => dispatch(changeSortAction("firstName"))}>
-            First Name<SortIcon  header='firstName' />
-          </th>
-          <th onClick={() => dispatch(changeSortAction("lastName"))}>
-            Last Name<SortIcon header='lastName' />
-          </th>
-          <th onClick={() => dispatch(changeSortAction("age"))}>
-            Age<SortIcon header='age' />
-          </th>
-          <th>Remove </th>
-        </tr>
-      </thead>
-      <tbody>
-        {state.persons.map(person => (
-          <PersonTableRow key={person.id} person={person} handleRemove={handleRemove} editModalState={editModalState} />
-        ))}
-      </tbody>
-    </table>
+    <div className="TableDiv">
+      <table className="Table">
+        <thead>
+          <tr>
+            <th onClick={() => dispatch(changeSortAction("firstName"))}>
+              First Name<SortIcon header='firstName' />
+            </th>
+            <th onClick={() => dispatch(changeSortAction("lastName"))}>
+              Last Name<SortIcon header='lastName' />
+            </th>
+            <th onClick={() => dispatch(changeSortAction("age"))}>
+              Age<SortIcon header='age' />
+            </th>
+            <th>Remove </th>
+          </tr>
+        </thead>
+        <tbody>
+          {state.persons.map(person => (
+            <PersonTableRow key={person.id} person={person} handleRemove={handleRemove} editModalState={editModalState} />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

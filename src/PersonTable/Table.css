@@ -1,16 +1,30 @@
+.TableDiv {
+  display: block;
+  height: 50vh;
+  overflow-y: scroll;
+}
+
 .Table {
-  table-layout: fixed;
+  table-layout: auto;
   border-radius: 5px;
   background: white;
   padding: 10px;
-  width: 90%;
+  width: 75vw;
+}
+
+tbody {
+  display: table-header-group;
 }
 
 th,
 td {
   padding: 0;
-  width: 100px;
-  overflow: hidden;
+  width: 30%;
+}
+
+th {
+  position: sticky;
+  top: 0;
 }
 
 tr:nth-child(even) {
