@@ -6,7 +6,7 @@ The frontend provides a user interface for the Person App. The project files hav
 
 The frontend uses TypeScript and React. State management is built with React Hooks and Context. Styling is made with the combination of `CSS`, `styled-components` and `react-icons`. The frontend uses `axios` to communicate with the backend.
 
-The backend can be found here: [Backend]()
+The backend can be found here: [Backend](https://github.com/JDingo/person-app-back)
 
 ## Usage
 The application is hosted by Heroku. It can be accessed [here]( 
