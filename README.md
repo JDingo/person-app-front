@@ -4,7 +4,7 @@ This project is the frontend for a Person App which stores a person's first name
 ## Description
 The frontend provides a user interface for the Person App. The project files have been structured according to components.
 
-The frontend uses TypeScript and React. Styling is made with the combination of `CSS`, `styled-components` and `react-icons`. The frontend uses `axios` to communicate with the backend.
+The frontend uses TypeScript and React. State management is built with React Hooks and Context. Styling is made with the combination of `CSS`, `styled-components` and `react-icons`. The frontend uses `axios` to communicate with the backend.
 
 The backend can be found here: [Backend]()
 
